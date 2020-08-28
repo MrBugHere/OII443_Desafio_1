@@ -20,6 +20,7 @@ public:
     Estado();
     void ingresarObjetos(int dato);
     //void agregarListaObjetos(Lista nueva);
+    void ordenarObjetos();
     void imprimirObjetos();
     ~Estado();
 };

@@ -102,6 +102,25 @@ Lista::~Lista()
    delete ultimo;
 }
 
+void Lista::ordenarLista(){
+   Nodo *nodo = primero->next;
+   while (nodo->next!=NULL)
+   {
+      Nodo *comparar = nodo->next;
+      while (comparar->next != NULL)
+      {
+         if(nodo->dato < comparar->dato){
+            int aux = comparar->dato;
+            comparar->dato = nodo->dato;
+            nodo->dato = aux;
+         }
+         comparar = comparar->next;
+      }
+      nodo = nodo->next;
+   }
+   
+}
+
 Lista Lista::getLista(){
    Nodo *nodo = primero;
    Lista copia;

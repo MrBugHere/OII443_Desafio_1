@@ -22,6 +22,8 @@ int main(){
 		cout<<"\nDesea agregar otro peso (s/n): ";
 		cin>>rpt;
 	}while((rpt == 's')||(rpt=='S'));
+    estado.ordenarObjetos();
+    cout<<"\nLista de objetos agregados al estado: "; 
     estado.imprimirObjetos();
     
     return 0;

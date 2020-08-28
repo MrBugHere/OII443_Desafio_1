@@ -24,7 +24,9 @@ void Estado::ingresarObjetos(int dato){
 void Estado::imprimirObjetos(){
     objetos.printForward();
 }
-
+void Estado::ordenarObjetos(){
+    objetos.ordenarLista();
+}
 Estado::~Estado(){
     
     objetos.~Lista();
