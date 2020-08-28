@@ -10,12 +10,18 @@ using namespace std;
 
 int main(){
     Lista lista;
-    lista.addFront(20);
-    lista.addFront(5);
-    lista.addFront(30);
-    lista.addFront(15);
-    lista.printForward();
+    int dato;
+    char rpt;
+    do{ //Pedimos todos los elementos de la pila
+		cout<<"Ingrese peso: ";
+		cin>>dato;
+		lista.addFront(dato);
+	
+		cout<<"\nDesea agregar otro peso (s/n): ";
+		cin>>rpt;
+	}while((rpt == 's')||(rpt=='S'));
     
+    lista.printForward();
     return 0;
 }
 

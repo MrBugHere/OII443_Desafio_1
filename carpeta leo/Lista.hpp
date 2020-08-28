@@ -1,4 +1,7 @@
+#ifndef LISTA_H
+#define LISTA_H
 
+using namespace std;
 class Nodo{
 private:
     int dato;
@@ -28,8 +31,4 @@ private:
 
 };
 
-
-
-//Prototipos de Funci�n
-
-
+#endif
