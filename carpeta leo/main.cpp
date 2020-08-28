@@ -3,40 +3,20 @@
 #include<iostream>
 #include<conio.h>
 #include<stdlib.h>
-#include "main.h"
+#include "Lista.hpp"
 using namespace std;
 
 
 
 int main(){
-	Stack *pila = NULL;	//Inicializamos pila
-	int dato;
-	char rpt;
-	
-	do{ //Pedimos todos los elementos de la pila
-		cout<<"Agregar peso: ";
-		cin>>dato;
-		agregarPila(pila,dato);
-	
-		cout<<"\nDesea agregar otro peso a pila(s/n): ";
-		cin>>rpt;
-	}while((rpt == 's')||(rpt=='S'));
-	
-	
-	cout<<"\nMostrando los pesos de la pila: ";
-	while(pila != NULL){
-		sacarPila(pila,dato);
-		
-		if(pila != NULL){
-			cout<<dato<<" , ";
-		}
-		else{
-			cout<<dato<<".";
-		}
-	}
-	
-	getch();
-	return 0;
+    Lista lista;
+    lista.addFront(20);
+    lista.addFront(5);
+    lista.addFront(30);
+    lista.addFront(15);
+    lista.printForward();
+    
+    return 0;
 }
 
 
