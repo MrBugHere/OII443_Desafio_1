@@ -30,10 +30,11 @@ public:
 };
 
 bool isValidState(State S, float max){
+
     std::list<Container>::iterator it;
 
     for(it = S.containers.begin(); it!=S.containers.end(); ++it){
-        if( it.currentWeight > max){
+        if( *it.currentWeight > max){
             return false;
         }
     };
