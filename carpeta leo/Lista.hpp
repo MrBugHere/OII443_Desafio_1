@@ -24,6 +24,7 @@ public:
     void removeBack();
     void printReverse();
     void printForward();
+    Lista getLista();
 
 private:
     Nodo *primero;

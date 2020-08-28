@@ -101,3 +101,14 @@ Lista::~Lista()
    delete primero;
    delete ultimo;
 }
+
+Lista Lista::getLista(){
+   Nodo *nodo = primero;
+   Lista copia;
+   
+   while(nodo != ultimo){
+      nodo = nodo->next;
+      copia.addBack(nodo->dato);
+   }
+   return copia;
+}

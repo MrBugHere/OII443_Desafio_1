@@ -4,24 +4,26 @@
 #include<conio.h>
 #include<stdlib.h>
 #include "Lista.hpp"
+#include "Estado.hpp"
 using namespace std;
 
 
 
 int main(){
     Lista lista;
+    Estado estado;
     int dato;
     char rpt;
     do{ //Pedimos todos los elementos de la pila
 		cout<<"Ingrese peso: ";
 		cin>>dato;
-		lista.addFront(dato);
+		estado.ingresarObjetos(dato);
 	
 		cout<<"\nDesea agregar otro peso (s/n): ";
 		cin>>rpt;
 	}while((rpt == 's')||(rpt=='S'));
+    estado.imprimirObjetos();
     
-    lista.printForward();
     return 0;
 }
 
