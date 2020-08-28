@@ -15,10 +15,11 @@ void Container::insertItem(float item){ //Inserta el item dentro del container, 
     contents.push_front(item);
 }
 
-struct Action
+class Action
 {
-    int noContainer; //Numero de Container;
-    float item; //Peso del obejto
+public:
+    int noContainer; //Numero de Container -1 => nuevo container
+    float item; //Peso del objeto
 };
 
 class State
@@ -29,7 +30,7 @@ public:
     std::list<Container> containers; //lista de Containers
 };
 
-bool isValidState(State S, float max){
+bool isValidState(State &S, float max){
 
     std::list<Container>::iterator it;
 
@@ -40,3 +41,50 @@ bool isValidState(State S, float max){
     };
     return true;
 };
+
+std::list<Action> getActions(State &S, float max)
+{ 
+    std::list<Action> retList;
+    std::list<Container>::iterator it;
+    int i = 0;
+    if(isValidState(S)){
+        Action ret;
+        for(it = S.containers.begin(); it!=S.containers.end(); ++it){
+            cout<< *it.currentWeight + S.itemQueue.front();
+            if(*it.currentWeight + S.itemQueue.front() < max){
+                ret.item = S.itemQueue.front();
+                ret.noContainer = i;
+                retList.push_front(ret);       
+            }
+            i++;
+        };
+        ret.item = S.itemQueue.front();
+        ret.noContainer = -1;
+        retList.push_front(ret);
+        return retList;
+    }else{
+        return NULL;
+    }
+};
+
+std::State transition(State &S, Action &a){
+    State retAux = S;
+    if(a.noContainer == -1){
+        Container newContainer;
+        newContainer.insertItem(a.item);
+        retAux.itemQueue.pop_front();
+        retAux.containers.push_front(newContainer);
+        return retAux;
+    }else{
+        int i=0;
+        std::list<Container>::iterator it;
+        for(it = S.containers.begin(); it!=S.containers.end(); ++it){
+            if(i == a.noContainer){
+                *it.insertItem()
+            }
+            i++;
+        };
+
+        return retAux;
+    }
+}
