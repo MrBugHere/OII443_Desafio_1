@@ -78,13 +78,23 @@ std::State transition(State &S, Action &a){
     }else{
         int i=0;
         std::list<Container>::iterator it;
-        for(it = S.containers.begin(); it!=S.containers.end(); ++it){
+        for(it = retAux.containers.begin(); it!=retAux.containers.end(); ++it){
             if(i == a.noContainer){
-                *it.insertItem()
+                *it.insertItem(a.item);
+                retAux.itemQueue.pop_front();
+                break;
             }
             i++;
         };
-
         return retAux;
     }
 }
+
+bool isFinalState(State &S){
+    if(isValidState(S)){
+        return S.itemQueue.empty();
+    }else{
+        return false;
+    }
+}
+
