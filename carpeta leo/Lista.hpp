@@ -1,35 +1,38 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-using namespace std;
+template<class Objeto>
+
 class Nodo{
 private:
-    int dato;
+    Objeto dato;
     Nodo *prev;
     Nodo *next;
 
     friend class Lista;
+public:
+    Objeto getDato();
+
 };
 
-
+template <class Objeto>
 class Lista{
 public:
-    Lista();
+    Lista<objeto>();
     ~Lista();
-    int getFront();
+    <Objeto> getFront();
     int getBack();
-    void addFront(int dato);
+    void addFront(<Objeto>dato);
     void addBack(int dato);
     void removeFront();
     void removeBack();
     void printReverse();
     void printForward();
-    Lista getLista();
     void ordenarLista();
 
 private:
-    Nodo *primero;
-    Nodo *ultimo;
+    Nodo<objeto> *primero;
+    Nodo<objeto> *ultimo;
 
 };
 

@@ -15,7 +15,7 @@ class Estado
 {
 private:
     Lista objetos;
-    Paquete paquetes[10];
+    Paquete paquetes[];
 public:
     Estado();
     void ingresarObjetos(int dato);

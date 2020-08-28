@@ -17,17 +17,18 @@ using namespace std;
     return 0;
 	
 }*/
-
-Lista::Lista()
+template<class Objecto>
+/*Lista<Objeto>::Lista()
 {
-   primero = new Nodo;
-   ultimo = new Nodo;
+   Nodo<objeto> primero = new Nodo;
+   Nodo<objeto> ultimo = new Nodo;
    primero->next = ultimo;
    ultimo->prev = primero;
    primero->prev = NULL;
    ultimo->next = NULL;
-}
-int Lista::getFront()
+}*/
+template<class Objecto>
+<Objeto> Lista<Objeto>::getFront()
 {
    return primero->next->dato;
 }
