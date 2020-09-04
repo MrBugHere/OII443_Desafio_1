@@ -187,8 +187,9 @@ void State::printState() {
 
     cout << "\nRank: "
         << getRank();
-
+    cout<<"\n\n";
 }
+
 //--------------------------- Funciones Action ----------------------------------------------------//
 
 void Action::setnoContainer(int n) {
@@ -251,9 +252,6 @@ list<Action> get_actions(State& estado) {
             }
             j++;
         }
-
-
-
     }
     cout << "peso de cada item en accion";
     for (list<Action>::iterator i = actions.begin(); i != actions.end(); ++i)
@@ -344,19 +342,19 @@ void ranking(State& S) {
     // funcion que setea el rank del State dado
     // es el valor entero de la cantidad de Contenedores mas los items que falta por ordenar
     // menor numero es mejor (Menos contenedors y menos items que ordenar)
-    S.setRank(S.getSizeContainers() + S.getSizeItems());
+    S.setRank(S.getSizeContainers() -1 + S.getSizeItems() -1);
 }
 
 struct lessthanbyRank
 {
-    bool operator(const State& leftS, const State& rigthS) {
+    bool operator()(State& leftS, State& rigthS) {
         return leftS.getRank() < rigthS.getRank();
     };
 };
 
 
 void bestFirst(State& initial) {
-    priority_queue < State; vector < State; lessthanbyRank > qp;
+    priority_queue < State, vector<State>, lessthanbyRank > qp;
     ranking(initial);
     qp.push(initial);
     while (!qp.empty()) {
@@ -385,6 +383,7 @@ void menu() {
     cout << "Ingresar peso Maximo de Cada Contenedor: ";
     cin >> data;
     initial.agregarNuevoContainer(data);
+    initial.setVisited(false);
     ClearScreen();
     do { //Pedimos el peso de todos los elementos que se ingresaran.
         cout << "Ingrese peso: ";
@@ -396,12 +395,15 @@ void menu() {
         ClearScreen();
     } while ((res == 's') || (res == 'S'));
     initial.ordenarItems();
+    ranking(initial);
+    ClearScreen();
     do
     {
         cout << "\n1.- DFS"
             << "\n2.- BFS"
-            << "\n3.- imprimir estado inicial"
-            << "\n4.- Salir"
+            << "\n3.- BestFirst"
+            << "\n4.- imprimir estado inicial"
+            << "\n5.- Salir"
             << "\nRespuesta: ";
         cin >> res2;
         switch (res2)
@@ -416,9 +418,13 @@ void menu() {
             break;
         case 3:
             ClearScreen();
-            initial.printItems();
+            bestFirst(initial);
             break;
         case 4:
+            ClearScreen();
+            initial.printState();
+            break;
+        case 5:
             ClearScreen();
             cout << "Terminando programa...";
             exit(EXIT_SUCCESS);
