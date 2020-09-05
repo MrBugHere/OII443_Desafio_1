@@ -305,7 +305,7 @@ State transition(State& nuevoEstado, Action& action) {
         {
             if(i == action.getItem()){
                 retorno.eliminarItem(j);
-                break;
+                // break;
             }
             j++;
         }
@@ -324,7 +324,7 @@ State transition(State& nuevoEstado, Action& action) {
         {
             if(i == action.getItem()){
                 retorno.eliminarItem(j);
-                break;
+                // break;
             }
             j++;
         }
