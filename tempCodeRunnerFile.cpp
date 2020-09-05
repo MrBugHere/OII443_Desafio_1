@@ -1,1 +1,0 @@
-std::stack<State> S;
