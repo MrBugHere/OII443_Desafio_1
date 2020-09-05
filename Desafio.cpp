@@ -38,9 +38,11 @@ public:
     void printItems();
     void ordenarItems();
     double getUltimoItem();
+    //double getPrimerItem();
     void eliminarUltimoItem();
-
+    void eliminarItem(int pos);
     void agregarNuevoContainer(double n);
+    void agregarNuevoContainer(double n, double item);
     void agregarItem_container(double item, int pos);
     Container getUltimoContainer();
     vector<Container> getContainers();
@@ -131,18 +133,30 @@ Container State::getUltimoContainer() {
 void State::agregarNuevoContainer(double n) {
     Container nuevo;
     nuevo.setMaxWeight(n);
+    nuevo.setCurrentWeight(0);
     containers.push_back(nuevo);
 }
-
+void State::agregarNuevoContainer(double n, double item){
+    Container nuevo;
+    nuevo.setMaxWeight(n);
+    nuevo.setCurrentWeight(0);
+    nuevo.insertItem(item);
+    containers.push_back(nuevo);
+}
 vector<Container> State::getContainers() {
     return containers;
 }
 
 void State::agregarItem_container(double item, int pos) {
     containers[pos].insertItem(item);
+    
 }
 void State::eliminarUltimoItem() {
     items.pop_back();
+}
+
+void State::eliminarItem(int pos){
+    items.erase(items.begin() + pos);
 }
 vector<double> State::getItems() {
     return items;
@@ -237,7 +251,7 @@ list<Action> get_actions(State& estado) {
         for (auto containerAux : estado.getContainers())
         {
             if (action.esValido(itemAux, containerAux)) {
-                action.setItem(estado.getUltimoItem());
+                action.setItem(itemAux);
                 action.setContainer(containerAux);
                 action.setnoContainer(j);
                 action.setCrearContainer(false);
@@ -246,44 +260,57 @@ list<Action> get_actions(State& estado) {
             else
             {
 
-                action.setItem(estado.getUltimoItem());
+                action.setItem(itemAux);
+                
                 action.setCrearContainer(true);
                 actions.push_back(action);
             }
             j++;
         }
     }
-    cout << "peso de cada item en accion";
-    for (list<Action>::iterator i = actions.begin(); i != actions.end(); ++i)
-    {
-        action = *i;
-        cout << action.getItem() << "; ";
-    }
-
     return actions;
-
 }
 
-State transition(State nuevoEstado, Action& action) {
-
-
+State transition(State& nuevoEstado, Action& action) {
+    State retorno;
+    retorno = nuevoEstado;
+    int j =0;
     if (action.getCrearContainer())
     {
         Container nuevoContainer;
-        nuevoEstado.agregarNuevoContainer(action.getContainer().getMaxWeight());
-        nuevoEstado.agregarItem_container(action.getItem(), action.getNoContainer());
-        nuevoEstado.eliminarUltimoItem();
-        return nuevoEstado;
+        retorno.agregarNuevoContainer(action.getContainer().getMaxWeight(),action.getItem());
+        for (auto i : nuevoEstado.getItems())
+        {
+            if(i == action.getItem()){
+                retorno.eliminarItem(j);
+            }
+            j++;
+        }
+        return retorno;
 
     }
     else
     {
-        nuevoEstado.agregarItem_container(action.getItem(), action.getNoContainer());
-        nuevoEstado.eliminarUltimoItem();
-        return nuevoEstado;
+        retorno.agregarItem_container(action.getItem(), action.getNoContainer());
+        for (auto i : nuevoEstado.getItems())
+        {
+            if(i == action.getItem()){
+                retorno.eliminarItem(j);
+            }
+            j++;
+        }
+       
+        return retorno;
     }
+    
 
+}
 
+bool is_Final_State(State& current){
+    if(current.getItems().empty()){
+        return true;
+    }
+    return false;
 }
 
 //-------------------------------------------------------------------------------------------//
@@ -313,21 +340,22 @@ void ClearScreen() {
 }
 
 void dfs(State& initial) {
-    std::cout << "\n DFS";
-    std::stack<State> S;
+    cout << "\n DFS";
+    stack<State> S;
     S.push(initial);
     while (!S.empty()) {
-        std::cout << "\n while";
+        //cout << "\n while";
         State s = S.top(); S.pop();
         if (s.getvisited()) continue;
-        std::cout << "\n visit";
+        //cout << "\n visit";
         s.setVisited(true);
-        std::list<Action> actions = get_actions(s);
+        list<Action> actions = get_actions(s);
         for (Action a : actions) {
-            std::cout << "\n actions";
+            //cout << "\n actions";
             State t = transition(s, a);
-            std::cout << "\n transitioned";
-            if (!t.getvisited()) S.push(t);
+            t.setVisited(false);
+            //cout << "\n transitioned";
+            S.push(t);
         }
     }
 }
@@ -342,13 +370,13 @@ void ranking(State& S) {
     // funcion que setea el rank del State dado
     // es el valor entero de la cantidad de Contenedores mas los items que falta por ordenar
     // menor numero es mejor (Menos contenedors y menos items que ordenar)
-    S.setRank(S.getSizeContainers() -1 + S.getSizeItems() -1);
+    S.setRank(S.getSizeContainers() + S.getSizeItems());
 }
 
 struct lessthanbyRank
 {
     bool operator()(State& leftS, State& rigthS) {
-        return leftS.getRank() < rigthS.getRank();
+        return leftS.getRank() > rigthS.getRank();
     };
 };
 
@@ -364,12 +392,17 @@ void bestFirst(State& initial) {
         list<Action> actions = get_actions(s);
         for (Action a : actions) {
             State ss = transition(s, a);
-            ClearScreen();
-            ss.printState();
-            if (!waitForResponse()) {
-                break;
+            //ClearScreen();
+            ss.setVisited(false);
+            ranking(ss);           
+            if(is_Final_State(ss)){
+                cout<<"\nEstado Final\n";
+                ss.printState();
+                if (!waitForResponse()) {
+                    break;
+                }
             }
-            if (ss.getvisited()) qp.push(ss);
+            qp.push(ss);
         }
     }
 }
@@ -384,19 +417,19 @@ void menu() {
     cin >> data;
     initial.agregarNuevoContainer(data);
     initial.setVisited(false);
-    ClearScreen();
+    //ClearScreen();
     do { //Pedimos el peso de todos los elementos que se ingresaran.
         cout << "Ingrese peso: ";
         cin >> data;
         initial.pushItems(data);
 
-        cout << "\nDesea agregar otro peso (s/n): ";
+        cout << "Desea agregar otro peso (s/n): ";
         cin >> res;
-        ClearScreen();
+        //ClearScreen();
     } while ((res == 's') || (res == 'S'));
     initial.ordenarItems();
     ranking(initial);
-    ClearScreen();
+    //ClearScreen();
     do
     {
         cout << "\n1.- DFS"
